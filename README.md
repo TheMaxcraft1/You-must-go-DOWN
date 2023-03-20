@@ -1,2 +1,3 @@
 # You must go DOWN
- Vertical infinite game
+ Endless vertical platformer
+ 
