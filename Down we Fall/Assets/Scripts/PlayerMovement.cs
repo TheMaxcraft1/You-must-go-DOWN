@@ -1,31 +1,57 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+
 
 public class PlayerMovement : MonoBehaviour
 {
-    private float xDir;
-    private float yDir;
-    private Rigidbody2D _rb;
-    [SerializeField] private float _speed = 10;
+    // x Movement variables
+    private float _xDir;
+    [SerializeField] private float speed = 10;
+
+    // y Movement variables
+    private float _yDir;
     [SerializeField] private float jumpPower = 5;
+    
+    // Component variables
+    private Rigidbody2D _rb;
+    private SpriteRenderer _sr;
+    
+    // Ground Detection
+    [SerializeField] private Transform feet;
+    private LayerMask _groundMask;
+    
+    
     
     void Start()
     {
         _rb = gameObject.GetComponent<Rigidbody2D>();
+        _sr = gameObject.GetComponent<SpriteRenderer>();
+        _groundMask = LayerMask.NameToLayer("Ground");
+    }
+
+    private bool CheckGround()
+    {
+        RaycastHit2D hit;
+
+        hit = Physics2D.Raycast(feet.position, Vector2.down, 0.2f, _groundMask);
+
+        return hit;
     }
 
     void Jump()
     {
-        if (Input.GetKey(KeyCode.Space))
+        print(CheckGround());
+        Debug.DrawRay(feet.position, Vector2.down * 0.2f, Color.green);
+        if (CheckGround() && Input.GetKey(KeyCode.Space))
         {
-            yDir = 1;
-            print("Space is getting down");
+            _yDir = 1;
         }
         else
         {
-            yDir = 0;
+            _yDir = 0;
         }
     }
 
@@ -33,15 +59,17 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.A))
         {
-            xDir = -1;
+            _xDir = -1;
+            _sr.flipX = true;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            xDir = 1;
+            _xDir = 1;
+            _sr.flipX = false;
         }
         else
         {
-            xDir = 0;
+            _xDir = 0;
         }
     }
     void Update()
@@ -52,6 +80,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rb.AddForce(new Vector2(xDir * _speed ,yDir * jumpPower));
+        _rb.AddForce(new Vector2(_xDir * speed ,_yDir * jumpPower));
     }
 }
