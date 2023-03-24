@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed = 10;
 
     // y Movement variables
+    private bool _canJump;
     private float _yDir;
     [SerializeField] private float jumpPower = 5;
     
@@ -21,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     
     // Ground Detection
     [SerializeField] private Transform feet;
-    private LayerMask _groundMask;
+    [SerializeField] private LayerMask groundMask;
     
     
     
@@ -29,14 +30,13 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb = gameObject.GetComponent<Rigidbody2D>();
         _sr = gameObject.GetComponent<SpriteRenderer>();
-        _groundMask = LayerMask.NameToLayer("Ground");
     }
 
     private bool CheckGround()
     {
         RaycastHit2D hit;
 
-        hit = Physics2D.Raycast(feet.position, Vector2.down, 0.2f, _groundMask);
+        hit = Physics2D.Raycast(feet.position, Vector2.down, 0.2f, groundMask);
 
         return hit;
     }
@@ -48,10 +48,12 @@ public class PlayerMovement : MonoBehaviour
         if (CheckGround() && Input.GetKey(KeyCode.Space))
         {
             _yDir = 1;
+            _canJump = false;
         }
         else
         {
             _yDir = 0;
+            _canJump = true;
         }
     }
 
