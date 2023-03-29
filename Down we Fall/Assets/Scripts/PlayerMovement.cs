@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed = 10;
 
     // y Movement variables
-    private bool _canJump;
     private float _yDir;
     [SerializeField] private float jumpPower = 5;
     
@@ -21,39 +21,57 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer _sr;
     
     // Ground Detection
-    [SerializeField] private Transform feet;
+    private BoxCollider2D _boxCollider2D;
     [SerializeField] private LayerMask groundMask;
-    
-    
-    
-    void Start()
+
+
+    private void Awake()
     {
+        _boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
         _rb = gameObject.GetComponent<Rigidbody2D>();
         _sr = gameObject.GetComponent<SpriteRenderer>();
     }
+    
 
     private bool CheckGround()
     {
+        
         RaycastHit2D hit;
 
-        hit = Physics2D.Raycast(feet.position, Vector2.down, 0.2f, groundMask);
+        hit = Physics2D.BoxCast(_boxCollider2D.bounds.center, _boxCollider2D.bounds.size, 0f, Vector2.down, 0.2f, groundMask);
+        
+        Color raycolor;
+        if (hit.collider != null)
+        {
+            raycolor = Color.green;
+            
+        }
+        else
+        {
+            raycolor = Color.red;
+        }
+        Debug.DrawRay(_boxCollider2D.bounds.center + new Vector3(_boxCollider2D.bounds.extents.x,0), Vector2.down * (_boxCollider2D.bounds.extents.y + 0.2f ),raycolor );
+        Debug.DrawRay(_boxCollider2D.bounds.center - new Vector3(_boxCollider2D.bounds.extents.x,0), Vector2.down * (_boxCollider2D.bounds.extents.y + 0.2f ),raycolor );
+        Debug.DrawRay(_boxCollider2D.bounds.center - new Vector3(_boxCollider2D.bounds.extents.x, _boxCollider2D.bounds.extents.y + 0.2f), Vector2.right * (_boxCollider2D.bounds.extents.x * 2),raycolor );
 
         return hit;
     }
 
+    private void DrawBoxcast()
+    {
+   
+    }
+
     void Jump()
     {
-        print(CheckGround());
-        Debug.DrawRay(feet.position, Vector2.down * 0.2f, Color.green);
-        if (CheckGround() && Input.GetKey(KeyCode.Space))
+
+        if (CheckGround() && Input.GetKeyDown(KeyCode.Space))
         {
             _yDir = 1;
-            _canJump = false;
         }
-        else
+        else if(!CheckGround() || Input.GetKeyUp(KeyCode.Space))
         {
             _yDir = 0;
-            _canJump = true;
         }
     }
 
@@ -82,6 +100,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rb.AddForce(new Vector2(_xDir * speed ,_yDir * jumpPower));
+        _rb.AddForce(new Vector2(_xDir * speed ,_yDir * jumpPower), ForceMode2D.Impulse);
     }
 }

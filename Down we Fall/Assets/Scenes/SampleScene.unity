@@ -156,9 +156,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43d9ba3c4f75fd147a4f4c14c8f3f04a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
-  jumpPower: 90
-  feet: {fileID: 157016629}
+  speed: 0.5
+  jumpPower: 2.5
   groundMask:
     serializedVersion: 2
     m_Bits: 8
