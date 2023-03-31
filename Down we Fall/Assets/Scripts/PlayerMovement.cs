@@ -39,7 +39,14 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit2D hit;
 
         hit = Physics2D.BoxCast(_boxCollider2D.bounds.center, _boxCollider2D.bounds.size, 0f, Vector2.down, 0.2f, groundMask);
-        
+
+        DrawBoxcast(hit);
+     
+        return hit;
+    }
+
+    private void DrawBoxcast(RaycastHit2D hit)
+    {
         Color raycolor;
         if (hit.collider != null)
         {
@@ -54,12 +61,6 @@ public class PlayerMovement : MonoBehaviour
         Debug.DrawRay(_boxCollider2D.bounds.center - new Vector3(_boxCollider2D.bounds.extents.x,0), Vector2.down * (_boxCollider2D.bounds.extents.y + 0.2f ),raycolor );
         Debug.DrawRay(_boxCollider2D.bounds.center - new Vector3(_boxCollider2D.bounds.extents.x, _boxCollider2D.bounds.extents.y + 0.2f), Vector2.right * (_boxCollider2D.bounds.extents.x * 2),raycolor );
 
-        return hit;
-    }
-
-    private void DrawBoxcast()
-    {
-   
     }
 
     void Jump()
@@ -74,6 +75,18 @@ public class PlayerMovement : MonoBehaviour
             _yDir = 0;
         }
     }
+
+   /*
+    MAKE THIS HAPPEN 
+    void DownImpulse()
+    {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            print("S is being pressed");
+            _r
+        }
+    }
+    */
 
     void XMovement()
     {
@@ -101,5 +114,6 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         _rb.AddForce(new Vector2(_xDir * speed ,_yDir * jumpPower), ForceMode2D.Impulse);
+        //DownImpulse();
     }
 }

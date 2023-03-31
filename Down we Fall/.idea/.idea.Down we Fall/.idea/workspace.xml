@@ -7,6 +7,9 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlatformKiller.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -83,6 +86,7 @@
       <workItem from="1679624877446" duration="1722000" />
       <workItem from="1679679589659" duration="2977000" />
       <workItem from="1680036002918" duration="1914000" />
+      <workItem from="1680289488350" duration="2219000" />
     </task>
     <servers />
   </component>
