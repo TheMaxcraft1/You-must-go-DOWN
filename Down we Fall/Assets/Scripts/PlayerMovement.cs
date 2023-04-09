@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
@@ -24,9 +25,12 @@ public class PlayerMovement : MonoBehaviour
     private BoxCollider2D _boxCollider2D;
     [SerializeField] private LayerMask groundMask;
 
+    // Animation
+    private Animator anim;
 
     private void Awake()
     {
+        anim = gameObject.GetComponent<Animator>();
         _boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
         _rb = gameObject.GetComponent<Rigidbody2D>();
         _sr = gameObject.GetComponent<SpriteRenderer>();
@@ -65,14 +69,18 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
+        
 
         if (CheckGround() && Input.GetKeyDown(KeyCode.Space))
         {
             _yDir = 1;
+            anim.SetBool("isGrounded", false);
         }
         else if(!CheckGround() || Input.GetKeyUp(KeyCode.Space))
         {
             _yDir = 0;
+            anim.SetBool("isGrounded", true);
+            
         }
     }
 
@@ -94,15 +102,18 @@ public class PlayerMovement : MonoBehaviour
         {
             _xDir = -1;
             _sr.flipX = true;
+            anim.SetFloat("xDir", math.abs(_xDir));   
         }
         else if (Input.GetKey(KeyCode.D))
         {
             _xDir = 1;
             _sr.flipX = false;
+            anim.SetFloat("xDir", math.abs(_xDir));   
         }
         else
         {
             _xDir = 0;
+            anim.SetFloat("xDir", math.abs(_xDir));   
         }
     }
     void Update()
